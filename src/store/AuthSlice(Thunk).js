@@ -78,22 +78,63 @@ export const authSlice = createSlice({
     clearErrorMessage: (state) => {
       state.messageError = '';
     },
-
-    setCredentials: (state, action) => {
-      state.name = action.payload.username;
-      state.roles = action.payload.roles;
-      state.accessToken = action.payload.accessToken;
-    },
-
-    logOut: (state) => {
-      state = initialState;
-    },
   },
+  extraReducers: (builder) =>
+    builder
+      /* get token */
+      .addCase(fetchToken.pending, (state) => {
+        state.isLoading = true;
+        state.messageError = '';
+      })
+      .addCase(fetchToken.fulfilled, (state, action) => {
+        state.name = action.payload.username;
+        state.roles = action.payload.roles;
+        state.accessToken = action.payload.accessToken;
+        state.isLoading = false;
+      })
+      .addCase(fetchToken.rejected, (state, action) => {
+        state.isLoading = false;
+        state.messageError = action.payload;
+      })
+
+      /* refresh token */
+      .addCase(refreshToken.pending, (state) => {
+        state.isLoading = true;
+        state.messageError = '';
+      })
+      .addCase(refreshToken.fulfilled, (state, action) => {
+        state.name = action.payload.username;
+        state.roles = action.payload.roles;
+        state.accessToken = action.payload.accessToken;
+
+        state.isLoading = false;
+      })
+      .addCase(refreshToken.rejected, (state, action) => {
+        state.isLoading = false;
+        state.roles = [];
+        state.accessToken = null;
+      })
+
+      /* logout */
+      .addCase(logout.pending, (state, action) => {
+        state.isLoading = true;
+        state.messageError = '';
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.name = null;
+        state.accessToken = null;
+        state.roles = [];
+
+        state.isLoading = false;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.accessToken = null;
+        state.name = null;
+        state.roles = [];
+        state.isLoading = false;
+      }),
 });
 
-export const { clearErrorMessage, setCredentials, logOut } = authSlice.actions;
-
-export const selectCurrentUser = (state) => state.auth.name;
-export const selectCurrentToken = (state) => state.auth.accessToken;
+export const { clearErrorMessage } = authSlice.actions;
 
 export default authSlice.reducer;
