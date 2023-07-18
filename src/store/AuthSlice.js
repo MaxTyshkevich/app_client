@@ -75,10 +75,6 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    clearErrorMessage: (state) => {
-      state.messageError = '';
-    },
-
     setCredentials: (state, action) => {
       state.name = action.payload.username;
       state.roles = action.payload.roles;

@@ -1,22 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fetchToken, clearErrorMessage } from '../store/AuthSlice';
+import { useLoginMutation } from '../store/authApiSlice';
 
 const saveTrastLocalStorage = (value) => localStorage.setItem('trust', value);
 
 const Login = () => {
-  const { messageError, isLoading } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const [login, { isLoading, isError, error, reset }] = useLoginMutation();
 
   const refInput = useRef();
   const refMessage = useRef();
   const location = useLocation();
   const navigate = useNavigate();
-
-  console.log('from Private route', location.state);
-
-  /*  const [succes, setSucces] = useState(false); */
 
   const [userName, setUserName] = useState('maxmax');
   const [password, setPassword] = useState('!Qwerty123');
@@ -33,10 +27,11 @@ const Login = () => {
     setUserName('');
     setPassword('');
 
-    await dispatch(fetchToken(data)).unwrap();
-    saveTrastLocalStorage(trust);
-    console.log('aaaaaa');
-    navigate(location?.state?.from || '/', { replace: true });
+    const result = await login(data);
+    if (result.data) {
+      saveTrastLocalStorage(trust);
+      navigate(location?.state?.from || '/', { replace: true });
+    }
   };
 
   useEffect(() => {
@@ -46,17 +41,19 @@ const Login = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    dispatch(clearErrorMessage());
-  }, [userName, password]);
+    if (isError) {
+      reset();
+    }
+  }, [userName, password, isError, reset]);
 
   return (
     <section>
       <p
         ref={refMessage}
-        className={messageError ? 'errmsg' : 'offscreen'}
+        className={isError ? 'errmsg' : 'offscreen'}
         aria-live="assertive"
       >
-        {messageError}
+        {isError && error}
       </p>
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username: </label>
