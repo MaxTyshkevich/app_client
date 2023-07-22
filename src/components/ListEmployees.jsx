@@ -1,20 +1,11 @@
-import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchEmployee } from '../store/EmployeeSlice';
+import { useGetEmployeesQuery } from '../store/employeeApiSlice';
 import { refreshToken } from '../store/AuthSlice';
 import Employ from './Employ';
 
 const ListEmployees = () => {
   const dispatch = useDispatch();
-
-  const { employees } = useSelector((state) => state.employee);
-
-  useEffect(() => {
-    const promise = dispatch(fetchEmployee());
-    return () => {
-      promise.abort();
-    };
-  }, []);
+  const { data: employees } = useGetEmployeesQuery();
 
   return (
     <section>
@@ -32,7 +23,7 @@ const ListEmployees = () => {
             <Employ employee={employee} key={employee._id} />
           ))}
       </ul>
-      <button onClick={() => dispatch(refreshToken())}>send</button>
+      <button onClick={() => console.log('send')}>send</button>
     </section>
   );
 };

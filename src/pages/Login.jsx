@@ -44,7 +44,7 @@ const Login = () => {
     if (isError) {
       reset();
     }
-  }, [userName, password, isError, reset]);
+  }, [userName, password]);
 
   return (
     <section>

@@ -5,9 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from './store/index';
 import App from './App';
 import './index.css';
-import { getStore } from './api/axios';
-
-getStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

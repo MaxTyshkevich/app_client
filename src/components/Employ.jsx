@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { dellEmployee, updateEmployee } from '../store/EmployeeSlice';
-import { useDispatch } from 'react-redux';
+import {
+  useUpdateEmployeeMutation,
+  useDeleteEmployeeMutation,
+} from '../store/employeeApiSlice.js';
 
 const Employ = ({ employee }) => {
-  const dispatch = useDispatch();
-
+  const [updateEmployee] = useUpdateEmployeeMutation();
+  const [deleteEmployee] = useDeleteEmployeeMutation();
   const [firstname, setFirstname] = useState(employee.firstname);
   const [lastname, setLastname] = useState(employee.lastname);
   const [update, setUpdate] = useState(false);
@@ -16,7 +18,7 @@ const Employ = ({ employee }) => {
       const form = e.target.form;
       const formData = new FormData(form);
       formData.append('id', employee._id);
-      await dispatch(updateEmployee({ formData }));
+      updateEmployee({ formData });
     }
 
     setUpdate(!update);
@@ -75,10 +77,11 @@ const Employ = ({ employee }) => {
         )}
 
         <button
-          onClick={() => dispatch(dellEmployee(employee._id))}
+          onClick={() => deleteEmployee(employee._id)}
           style={{
             margin: 0,
           }}
+          type="button"
         >
           del
         </button>

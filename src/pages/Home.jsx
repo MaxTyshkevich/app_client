@@ -1,15 +1,16 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../store/AuthSlice';
+import { useSelector } from 'react-redux';
 import ListEmployees from '../components/ListEmployees';
+import { useLogoutMutation } from '../store/authApiSlice';
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const { name } = useSelector((state) => state.auth);
+  const [logout] = useLogoutMutation();
   const navigate = useNavigate();
 
+  const { name } = useSelector((state) => state.auth);
+
   const handleLogout = async () => {
-    await dispatch(logout());
+    await logout();
     navigate('/linkpage');
   };
 

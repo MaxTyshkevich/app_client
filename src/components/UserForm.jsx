@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addEmployee } from '../store/EmployeeSlice';
+import { useAddEmployeeMutation } from '../store/employeeApiSlice';
 
 const UserForm = () => {
-  const dispatch = useDispatch();
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
+  const [addEmployee] = useAddEmployeeMutation();
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (firstname && lastname) {
-      dispatch(addEmployee({ firstname, lastname }));
+      addEmployee({ firstname, lastname });
     }
     setFirstname('');
     setLastname('');

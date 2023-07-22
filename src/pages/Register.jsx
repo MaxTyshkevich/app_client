@@ -6,7 +6,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from '../api/axios';
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9_]{3,23}$/;
 const PWD_REGEX =
@@ -58,7 +57,7 @@ const Register = () => {
   }, [user, pwd, matchPwd]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    /* e.preventDefault();
 
     const v1 = USER_REGEX.test(user);
     const v2 = PWD_REGEX.test(pwd);
@@ -82,8 +81,6 @@ const Register = () => {
       console.log(response.data);
       console.log(response.accessToken);
       setSuccess(true);
-
-      /* clear input fields */
     } catch (error) {
       if (!error?.response) {
         setErrMsg('No server response');
@@ -93,7 +90,7 @@ const Register = () => {
       setErrMsg('Registration Failed');
     }
 
-    errRef.current.focus();
+    errRef.current.focus(); */
   };
 
   return (

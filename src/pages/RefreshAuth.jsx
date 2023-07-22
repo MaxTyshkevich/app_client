@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, Navigate } from 'react-router-dom';
-import { refreshToken } from '../store/AuthSlice';
+import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
+import { useRefreshMutation } from '../store/authApiSlice';
 
 const getTrastLocalStorage = () => JSON.parse(localStorage.getItem('trust'));
 
 const RefreshAuth = () => {
+  const [refresh] = useRefreshMutation();
   const { accessToken } = useSelector((state) => state.auth);
   const [firstLoadingComplite, setFirstLoadingComplite] = useState(false);
-  const dispatch = useDispatch();
   const persist = getTrastLocalStorage();
+
   useEffect(() => {
     let isMounted = true;
 
     const getRefresh = () =>
-      dispatch(refreshToken()).finally(() => {
+      refresh().finally(() => {
         isMounted && setFirstLoadingComplite(true);
       });
 
